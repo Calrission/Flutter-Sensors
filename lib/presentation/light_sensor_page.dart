@@ -1,7 +1,5 @@
-import 'dart:async';
-
-import 'package:environment_sensors/environment_sensors.dart';
 import 'package:flutter/material.dart';
+import 'package:sensor_project/domain/light_use_case.dart';
 
 class LightSensorPage extends StatefulWidget {
   const LightSensorPage({super.key});
@@ -12,36 +10,37 @@ class LightSensorPage extends StatefulWidget {
 
 class _LightSensorPageState extends State<LightSensorPage> {
 
-  bool isError = false;
+  String? error;
   bool isLoading = true;
   double valueLight = 0;
-  StreamSubscription<double>? _stream;
-  final environmentSensors = EnvironmentSensors();
+
+  LightUseCase useCase = LightUseCase();
 
   @override
   void initState() {
     super.initState();
-    environmentSensors.getSensorAvailable(SensorType.Light).then((value) {
-      setState(() {
-        isLoading = false;
-        isError = !value;
-      });
 
-      if (value){
-        _stream = environmentSensors.light.listen((event) {
-          setState(() {
-            valueLight = event;
-          });
+    useCase.launchListenSensor(
+      onChange: (value){
+        setState(() {
+          isLoading = false;
+          valueLight = value;
+        });
+      },
+      onError: (error){
+        setState(() {
+          isLoading = false;
+          this.error = error;
         });
       }
-    });
+    );
   }
 
 
   @override
   void dispose() {
     super.dispose();
-    _stream?.cancel();
+    useCase.dispose();
   }
 
   @override
@@ -51,8 +50,8 @@ class _LightSensorPageState extends State<LightSensorPage> {
       backgroundColor: Color.fromARGB(255, colorChannel, colorChannel, colorChannel),
       body: (isLoading)
           ? const Center(child: CircularProgressIndicator())
-          : (isError)
-            ? const Center(child: Text("Датчик света не обнаружен"))
+          : (error != null)
+            ? Center(child: Text(error!))
             : Center(
                 child: Text(valueLight.toString(), style: const TextStyle(
                   fontSize: 42,

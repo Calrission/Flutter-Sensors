@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sensor_project/accelerometer_page.dart';
-import 'package:sensor_project/camera_page.dart';
-import 'package:sensor_project/gps_page.dart';
-import 'package:sensor_project/gyroscope_page.dart';
-import 'package:sensor_project/humidity_page.dart';
-import 'package:sensor_project/light_sensor_page.dart';
-import 'package:sensor_project/magnetometer_page.dart';
-import 'package:sensor_project/pressure_sensor_page.dart';
-import 'package:sensor_project/proximity_sensor_page.dart';
-import 'package:sensor_project/temp_page.dart';
+import 'package:sensor_project/presentation/accelerometer_page.dart';
+import 'package:sensor_project/presentation/avatar_page.dart';
+import 'package:sensor_project/presentation/gps_page.dart';
+import 'package:sensor_project/presentation/gyroscope_page.dart';
+import 'package:sensor_project/presentation/humidity_page.dart';
+import 'package:sensor_project/presentation/proximity_sensor_page.dart';
+import 'package:sensor_project/presentation/pressure_sensor_page.dart';
+import 'package:sensor_project/presentation/temp_page.dart';
+
+import 'light_sensor_page.dart';
+import 'magnetometer_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -92,7 +93,7 @@ class _MainPageState extends State<MainPage> {
             const SizedBox(height: 18),
             FilledButton(
                 onPressed: (){
-                  navigateTo(const CameraPage());
+                  navigateTo(const AvatarPage());
                 },
                 child: const Text("Камера")
             ),

@@ -1,7 +1,5 @@
-import 'dart:async';
-
-import 'package:environment_sensors/environment_sensors.dart';
 import 'package:flutter/material.dart';
+import 'package:sensor_project/domain/humidity_use_case.dart';
 
 class HumiditySensorPage extends StatefulWidget {
   const HumiditySensorPage({super.key});
@@ -11,37 +9,36 @@ class HumiditySensorPage extends StatefulWidget {
 }
 
 class _HumiditySensorPageState extends State<HumiditySensorPage> {
-  bool isError = false;
+  String? error;
   bool isLoading = true;
   double humidity = 0;
-  StreamSubscription<double>? _stream;
-  final environmentSensors = EnvironmentSensors();
+
+  HumidityUseCase useCase = HumidityUseCase();
 
   late double screenHeight;
 
   @override
   void initState() {
     super.initState();
-    environmentSensors.getSensorAvailable(SensorType.Humidity).then((value) {
-      setState(() {
-        isLoading = false;
-        isError = !value;
-      });
-
-      if (value) {
-        _stream = environmentSensors.humidity.listen((event) {
-          setState(() {
-            humidity = event;
-          });
+    useCase.launchListenSensor(
+      onChange: (value){
+        setState(() {
+          isLoading = false;
+          humidity = value;
+        });
+      },
+      onError: (error){
+        setState(() {
+          this.error = error;
         });
       }
-    });
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
-    _stream?.cancel();
+    useCase.dispose();
   }
 
   @override
@@ -64,8 +61,8 @@ class _HumiditySensorPageState extends State<HumiditySensorPage> {
         Center(
           child: (isLoading)
             ? const CircularProgressIndicator()
-            : (isError)
-                ? const Text("Датчик влажности не обнаружен")
+            : (error != null)
+                ? Text(error!)
                 : Text(
                     humidity.toString(),
                     style: const TextStyle(

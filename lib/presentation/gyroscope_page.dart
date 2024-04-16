@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sensor_project/domain/gyroscope_use_case.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class GyroscopePage extends StatefulWidget {
@@ -14,45 +15,43 @@ class _GyroscopePageState extends State<GyroscopePage> {
 
   double deltaX = 0, deltaY = 0, deltaZ = 0;
   double x = 0, y = 0, z = 0;
+
+  GyroscopeUseCase useCase = GyroscopeUseCase();
+
   String? error;
   bool isLoading = true;
-  StreamSubscription<GyroscopeEvent>? _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    _streamSubscription = gyroscopeEventStream(
-      samplingPeriod: SensorInterval.gameInterval
-    ).listen(
-      (GyroscopeEvent event) {
+
+    useCase.launchListenSensor(
+      onChange: (x, y, z, deltaX, deltaY, deltaZ){
         if (isLoading) {
           isLoading = false;
         }
         setState(() {
-          deltaX = event.x;
-          deltaY = event.y;
-          deltaZ = event.z;
-
-          x += deltaX;
-          y += deltaY;
-          z += deltaZ;
+          this.deltaX = deltaX;
+          this.deltaY = deltaY;
+          this.deltaZ = deltaZ;
+          this.x = x;
+          this.y = y;
+          this.z = z;
         });
       },
-      onError: (error) {
+      onError: (error){
         setState(() {
           isLoading = false;
-          this.error = error.toString();
+          this.error = error;
         });
-      },
-      cancelOnError: true,
+      }
     );
   }
-
 
   @override
   void dispose() {
     super.dispose();
-    _streamSubscription?.cancel();
+    useCase.dispose();
   }
 
   @override
