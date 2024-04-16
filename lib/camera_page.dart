@@ -39,17 +39,17 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!(controller?.value.isInitialized ?? false)) {
-      return Container();
+    if (controller?.value.isInitialized ?? false) {
+      return MaterialApp(
+        home: CameraPreview(controller!),
+      );
     }
-    return MaterialApp(
-      home: CameraPreview(controller!),
-    );
+    return Container();
   }
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
+    controller?.dispose();
   }
 }

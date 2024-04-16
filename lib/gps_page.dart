@@ -47,7 +47,7 @@ class _GpsPageState extends State<GpsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
+        child: (isError) ? const Text("Ошибка") : Text(
           "longitude=${lastPosition?.longitude}\n"
           "latitude=${lastPosition?.latitude}",
         ),
