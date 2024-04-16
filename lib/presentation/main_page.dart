@@ -95,7 +95,7 @@ class _MainPageState extends State<MainPage> {
                 onPressed: (){
                   navigateTo(const AvatarPage());
                 },
-                child: const Text("Камера")
+                child: const Text("Аватар")
             ),
             const SizedBox(height: 18),
             FilledButton(
