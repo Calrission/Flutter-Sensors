@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sensor_project/domain/magnetometer_use_case.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class MagnetometerPage extends StatefulWidget {
@@ -15,38 +16,36 @@ class _MagnetometerPageState extends State<MagnetometerPage> {
   double? x, y, z;
   String? error;
   bool isLoading = true;
-  StreamSubscription<MagnetometerEvent>? _streamSubscription;
 
+  MagnetometerUseCase useCase = MagnetometerUseCase();
 
   @override
   void initState() {
     super.initState();
-    _streamSubscription = magnetometerEventStream().listen(
-      (MagnetometerEvent event) {
-        if (isLoading) {
-          isLoading = false;
+    useCase.launchListenSensor(
+        onChange: (event) {
+          if (isLoading) {
+            isLoading = false;
+          }
+          setState(() {
+            x = event.x;
+            y = event.y;
+            z = event.z;
+          });
+        },
+        onError: (error) {
+          setState(() {
+            isLoading = false;
+            error = error.toString();
+          });
         }
-        setState(() {
-          x = event.x;
-          y = event.y;
-          z = event.z;
-        });
-      },
-      onError: (error) {
-        setState(() {
-          isLoading = false;
-          error = error.toString();
-        });
-      },
-      cancelOnError: true,
     );
   }
-
 
   @override
   void dispose() {
     super.dispose();
-    _streamSubscription?.cancel();
+    useCase.dispose();
   }
 
   @override
@@ -54,19 +53,19 @@ class _MagnetometerPageState extends State<MagnetometerPage> {
     return Scaffold(
       body: Center(
         child: (error == null)
-            ? (isLoading)
-              ? const CircularProgressIndicator()
-              : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("X = $x"),
-                  const SizedBox(height: 18),
-                  Text("Y = $y"),
-                  const SizedBox(height: 18),
-                  Text("Z = $z"),
-                ],
-              )
-            : Text(error!)
+          ? (isLoading)
+            ? const CircularProgressIndicator()
+            : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("X = $x"),
+                const SizedBox(height: 18),
+                Text("Y = $y"),
+                const SizedBox(height: 18),
+                Text("Z = $z"),
+              ],
+            )
+          : Text(error!)
       ),
     );
   }

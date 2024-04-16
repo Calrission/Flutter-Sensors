@@ -1,7 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:proximity_sensor/proximity_sensor.dart';
+import 'package:sensor_project/domain/proximity_use_case.dart';
 
 class ProximitySensorPage extends StatefulWidget {
   const ProximitySensorPage({super.key});
@@ -14,27 +12,26 @@ class _ProximitySensorPageState extends State<ProximitySensorPage> {
 
   String? error;
   bool isLoading = true;
-  late StreamSubscription<dynamic> _streamSubscription;
   int value = 0;
+  ProximityUseCase useCase = ProximityUseCase();
 
   @override
   void initState() {
     super.initState();
-    ProximitySensor.setProximityScreenOff(false)
-      .onError((error, stackTrace) {
+    useCase.launchListenSensor(
+      onChange: (value){
         setState(() {
           isLoading = false;
-          this.error = error?.toString();
+          this.value = value;
         });
-    });
-    _streamSubscription = ProximitySensor.events.listen((int event) {
-      if (isLoading) {
-        isLoading = false;
+      },
+      onError: (error){
+        setState(() {
+          isLoading = false;
+          this.error = error;
+        });
       }
-      setState(() {
-        value = event;
-      });
-    });
+    );
   }
 
   @override
@@ -45,8 +42,8 @@ class _ProximitySensorPageState extends State<ProximitySensorPage> {
           ? const CircularProgressIndicator()
           : Text(
             (error == null)
-                ? value.toString()
-                : error!
+              ? value.toString()
+              : error!
           ),
       ),
     );
@@ -55,6 +52,6 @@ class _ProximitySensorPageState extends State<ProximitySensorPage> {
   @override
   void dispose() {
     super.dispose();
-    _streamSubscription.cancel();
+    useCase.dispose();
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:environment_sensors/environment_sensors.dart';
 import 'package:flutter/material.dart';
+import 'package:sensor_project/domain/temp_use_case.dart';
 
 class TempSensorPage extends StatefulWidget {
   const TempSensorPage({super.key});
@@ -11,37 +12,37 @@ class TempSensorPage extends StatefulWidget {
 }
 
 class _TempSensorPageState extends State<TempSensorPage> {
-  
-  final environmentSensors = EnvironmentSensors();
-  bool isError = false;
-  StreamSubscription<double>? _stream;
+
+  String? error;
   bool isLoading = true;
   double temp = 0;
+  TempUseCase useCase = TempUseCase();
 
   @override
   void initState() {
     super.initState();
-    environmentSensors.getSensorAvailable(SensorType.AmbientTemperature).then((value) {
-      setState(() {
-        isLoading = false;
-        isError = !value;
-      });
 
-      if (value){
-        _stream = environmentSensors.temperature.listen((event) {
+    useCase.launchListenSensor(
+        onChange: (value){
           setState(() {
-            temp = event;
+            isLoading = false;
+            temp = value;
           });
-        });
-      }
-    });
+        },
+        onError: (error){
+          setState(() {
+            isLoading = false;
+            this.error = error;
+          });
+        }
+    );
   }
 
 
   @override
   void dispose() {
     super.dispose();
-    _stream?.cancel();
+    useCase.dispose();
   }
 
   @override
@@ -50,8 +51,8 @@ class _TempSensorPageState extends State<TempSensorPage> {
       body: Center(
         child: (isLoading)
           ? const CircularProgressIndicator()
-          : (isError) 
-            ? const Text("Датчик температуры не обнаружен")
+          : (error != null)
+            ? Text(error!)
             : Text("$temp°")
       ),
     );

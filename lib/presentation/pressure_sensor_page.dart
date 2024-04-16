@@ -1,8 +1,5 @@
-import 'dart:async';
-
-import 'package:environment_sensors/environment_sensors.dart';
 import 'package:flutter/material.dart';
-import 'package:proximity_sensor/proximity_sensor.dart';
+import 'package:sensor_project/domain/pressure_use_case.dart';
 
 class PressureSensorPage extends StatefulWidget {
   const PressureSensorPage({super.key});
@@ -13,30 +10,29 @@ class PressureSensorPage extends StatefulWidget {
 
 class _PressureSensorPageState extends State<PressureSensorPage> {
 
-  final environmentSensors = EnvironmentSensors();
   String? error;
-  bool isError = false;
   bool isLoading = true;
-  late StreamSubscription<dynamic> _streamSubscription;
   double value = 0;
+
+  PressureUseCase useCase = PressureUseCase();
 
   @override
   void initState() {
     super.initState();
-    environmentSensors.getSensorAvailable(SensorType.Pressure).then((value) {
-      setState(() {
-        isLoading = false;
-        isError = !value;
-      });
-
-      if (value){
-        _streamSubscription = environmentSensors.pressure.listen((event) {
+    useCase.launchListenSensor(
+        onChange: (value){
           setState(() {
-            this.value = event;
+            isLoading = false;
+            this.value = value;
           });
-        });
-      }
-    });
+        },
+        onError: (error){
+          setState(() {
+            isLoading = false;
+            this.error = error;
+          });
+        }
+    );
   }
 
   @override
@@ -47,8 +43,8 @@ class _PressureSensorPageState extends State<PressureSensorPage> {
           ? const CircularProgressIndicator()
           : Text(
             (error == null)
-                ? value.toString()
-                : error!
+              ? value.toString()
+              : error!
           ),
       ),
     );
@@ -57,6 +53,6 @@ class _PressureSensorPageState extends State<PressureSensorPage> {
   @override
   void dispose() {
     super.dispose();
-    _streamSubscription.cancel();
+    useCase.dispose();
   }
 }
