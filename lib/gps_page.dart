@@ -13,15 +13,14 @@ class _GpsPageState extends State<GpsPage> {
   bool isError = false;
 
   Future<Position?> getCurrentLocation() async {
-    LocationPermission permission;
-
-    isError = !(await Geolocator.isLocationServiceEnabled());
-
-    permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      isError = permission == LocationPermission.denied || permission == LocationPermission.deniedForever;
     }
+
+    isError = !(await Geolocator.isLocationServiceEnabled()) ||
+              permission == LocationPermission.denied ||
+              permission == LocationPermission.deniedForever;
 
     if (isError){
       setState(() {});
