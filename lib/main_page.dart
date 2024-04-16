@@ -4,6 +4,7 @@ import 'package:sensor_project/gyroscope_page.dart';
 import 'package:sensor_project/humidity_page.dart';
 import 'package:sensor_project/light_sensor_page.dart';
 import 'package:sensor_project/magnetometer_page.dart';
+import 'package:sensor_project/pressure_sensor_page.dart';
 import 'package:sensor_project/proximity_sensor_page.dart';
 import 'package:sensor_project/temp_page.dart';
 
@@ -78,6 +79,13 @@ class _MainPageState extends State<MainPage> {
                   navigateTo(const HumiditySensorPage());
                 },
                 child: const Text("Датчик влажности")
+            ),
+            const SizedBox(height: 18),
+            FilledButton(
+                onPressed: (){
+                  navigateTo(const PressureSensorPage());
+                },
+                child: const Text("Датчик давления")
             ),
           ],
         ),
