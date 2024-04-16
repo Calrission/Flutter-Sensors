@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class GyroscopePage extends StatefulWidget {
   const GyroscopePage({super.key});
@@ -8,12 +11,83 @@ class GyroscopePage extends StatefulWidget {
 }
 
 class _GyroscopePageState extends State<GyroscopePage> {
+
+  double deltaX = 0, deltaY = 0, deltaZ = 0;
+  double x = 0, y = 0, z = 0;
+  String? error;
+  StreamSubscription<GyroscopeEvent>? _streamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _streamSubscription = gyroscopeEventStream(
+      samplingPeriod: SensorInterval.gameInterval
+    ).listen(
+      (GyroscopeEvent event) {
+        setState(() {
+          deltaX = event.x;
+          deltaY = event.y;
+          deltaZ = event.z;
+
+          x += deltaX;
+          y += deltaY;
+          z += deltaZ;
+        });
+      },
+      onError: (error) {
+        setState(() {
+          error = error.toString();
+        });
+      },
+      cancelOnError: true,
+    );
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-
+      body: Center(
+          child: (error == null)
+              ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text("Дельта", style: TextStyle(fontWeight: FontWeight.w600),),
+                      const SizedBox(height: 18),
+                      Text("X = $deltaX"),
+                      const SizedBox(height: 18),
+                      Text("Y = $deltaY"),
+                      const SizedBox(height: 18),
+                      Text("Z = $deltaZ"),
+                    ],
+                  ),
+                  const SizedBox(width: 64),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text("Значения", style: TextStyle(fontWeight: FontWeight.w600),),
+                      const SizedBox(height: 18),
+                      Text("X = $x"),
+                      const SizedBox(height: 18),
+                      Text("Y = $y"),
+                      const SizedBox(height: 18),
+                      Text("Z = $z"),
+                    ],
+                  ),
+                ],
+              )
+              : Text(error!)
       ),
     );
   }
+
 }
