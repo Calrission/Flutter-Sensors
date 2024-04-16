@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:light_sensor/light_sensor.dart';
 
@@ -13,6 +15,7 @@ class _LightSensorPageState extends State<LightSensorPage> {
   bool isError = false;
   bool isLoading = true;
   int valueLight = 0;
+  StreamSubscription<int>? _stream;
 
   @override
   void initState() {
@@ -24,13 +27,20 @@ class _LightSensorPageState extends State<LightSensorPage> {
       });
 
       if (value){
-        LightSensor.luxStream().listen((event) {
+        _stream = LightSensor.luxStream().listen((event) {
           setState(() {
             valueLight = event;
           });
         });
       }
     });
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _stream?.cancel();
   }
 
   @override
