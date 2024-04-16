@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:environment_sensors/environment_sensors.dart';
 import 'package:flutter/material.dart';
-import 'package:light_sensor/light_sensor.dart';
 
 class LightSensorPage extends StatefulWidget {
   const LightSensorPage({super.key});
@@ -14,20 +14,21 @@ class _LightSensorPageState extends State<LightSensorPage> {
 
   bool isError = false;
   bool isLoading = true;
-  int valueLight = 0;
-  StreamSubscription<int>? _stream;
+  double valueLight = 0;
+  StreamSubscription<double>? _stream;
+  final environmentSensors = EnvironmentSensors();
 
   @override
   void initState() {
     super.initState();
-    LightSensor.hasSensor().then((value) {
+    environmentSensors.getSensorAvailable(SensorType.Light).then((value) {
       setState(() {
         isLoading = false;
         isError = !value;
       });
 
       if (value){
-        _stream = LightSensor.luxStream().listen((event) {
+        _stream = environmentSensors.light.listen((event) {
           setState(() {
             valueLight = event;
           });

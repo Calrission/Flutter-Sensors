@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
                 onPressed: (){
                   navigateTo(const GyroscopePage());
                 },
-                child: const Text("Гироском")
+                child: const Text("Гироскоп")
             ),
             const SizedBox(height: 18),
             FilledButton(

@@ -30,7 +30,7 @@ class _AccelerometerPageState extends State<AccelerometerPage> {
         },
       onError: (error) {
         setState(() {
-          error = error.toString();
+          this.error = error.toString();
         });
       },
       cancelOnError: true,

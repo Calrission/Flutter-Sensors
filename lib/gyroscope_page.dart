@@ -36,7 +36,7 @@ class _GyroscopePageState extends State<GyroscopePage> {
       },
       onError: (error) {
         setState(() {
-          error = error.toString();
+          this.error = error.toString();
         });
       },
       cancelOnError: true,
