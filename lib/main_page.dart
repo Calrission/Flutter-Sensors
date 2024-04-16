@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sensor_project/accelerometer_page.dart';
 import 'package:sensor_project/camera_page.dart';
+import 'package:sensor_project/gps_page.dart';
 import 'package:sensor_project/gyroscope_page.dart';
 import 'package:sensor_project/humidity_page.dart';
 import 'package:sensor_project/light_sensor_page.dart';
@@ -94,6 +95,13 @@ class _MainPageState extends State<MainPage> {
                   navigateTo(const CameraPage());
                 },
                 child: const Text("Камера")
+            ),
+            const SizedBox(height: 18),
+            FilledButton(
+                onPressed: (){
+                  navigateTo(const GpsPage());
+                },
+                child: const Text("GPS")
             ),
           ],
         ),
