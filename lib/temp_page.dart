@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:environment_sensors/environment_sensors.dart';
 import 'package:flutter/material.dart';
 
-class TempPage extends StatefulWidget {
-  const TempPage({super.key});
+class TempSensorPage extends StatefulWidget {
+  const TempSensorPage({super.key});
 
   @override
-  State<TempPage> createState() => _TempPageState();
+  State<TempSensorPage> createState() => _TempSensorPageState();
 }
 
-class _TempPageState extends State<TempPage> {
+class _TempSensorPageState extends State<TempSensorPage> {
   
   final environmentSensors = EnvironmentSensors();
   bool isError = false;
