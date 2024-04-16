@@ -13,6 +13,7 @@ class AccelerometerPage extends StatefulWidget {
 class _AccelerometerPageState extends State<AccelerometerPage> {
   double x = 0, y = 0, z = 0;
   String? error;
+  bool isLoading = true;
   StreamSubscription<AccelerometerEvent>? _streamSubscription;
 
   @override
@@ -22,6 +23,9 @@ class _AccelerometerPageState extends State<AccelerometerPage> {
         samplingPeriod: SensorInterval.gameInterval
     ).listen(
         (AccelerometerEvent event) {
+          if (isLoading) {
+            isLoading = false;
+          }
           setState(() {
             x = event.x;
             y = event.y;
@@ -29,6 +33,7 @@ class _AccelerometerPageState extends State<AccelerometerPage> {
           });
         },
       onError: (error) {
+        isLoading = false;
         setState(() {
           this.error = error.toString();
         });
@@ -48,7 +53,9 @@ class _AccelerometerPageState extends State<AccelerometerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: (error == null)
+          child: (isLoading)
+          ? const CircularProgressIndicator()
+          : (error == null)
               ? Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

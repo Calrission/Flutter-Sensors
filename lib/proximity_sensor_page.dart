@@ -13,6 +13,7 @@ class ProximitySensorPage extends StatefulWidget {
 class _ProximitySensorPageState extends State<ProximitySensorPage> {
 
   String? error;
+  bool isLoading = true;
   late StreamSubscription<dynamic> _streamSubscription;
   int value = 0;
 
@@ -22,10 +23,14 @@ class _ProximitySensorPageState extends State<ProximitySensorPage> {
     ProximitySensor.setProximityScreenOff(false)
       .onError((error, stackTrace) {
         setState(() {
+          isLoading = false;
           this.error = error?.toString();
         });
     });
     _streamSubscription = ProximitySensor.events.listen((int event) {
+      if (isLoading) {
+        isLoading = false;
+      }
       setState(() {
         value = event;
       });
@@ -36,9 +41,13 @@ class _ProximitySensorPageState extends State<ProximitySensorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          (error == null) ? value.toString() : error!
-        ),
+        child: (isLoading)
+          ? const CircularProgressIndicator()
+          : Text(
+            (error == null)
+                ? value.toString()
+                : error!
+          ),
       ),
     );
   }

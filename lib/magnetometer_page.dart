@@ -14,6 +14,7 @@ class _MagnetometerPageState extends State<MagnetometerPage> {
 
   double? x, y, z;
   String? error;
+  bool isLoading = true;
   StreamSubscription<MagnetometerEvent>? _streamSubscription;
 
 
@@ -22,6 +23,9 @@ class _MagnetometerPageState extends State<MagnetometerPage> {
     super.initState();
     _streamSubscription = magnetometerEventStream().listen(
       (MagnetometerEvent event) {
+        if (isLoading) {
+          isLoading = false;
+        }
         setState(() {
           x = event.x;
           y = event.y;
@@ -30,6 +34,7 @@ class _MagnetometerPageState extends State<MagnetometerPage> {
       },
       onError: (error) {
         setState(() {
+          isLoading = false;
           error = error.toString();
         });
       },
@@ -49,16 +54,18 @@ class _MagnetometerPageState extends State<MagnetometerPage> {
     return Scaffold(
       body: Center(
         child: (error == null)
-            ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("X = $x"),
-                const SizedBox(height: 18),
-                Text("Y = $y"),
-                const SizedBox(height: 18),
-                Text("Z = $z"),
-              ],
-            )
+            ? (isLoading)
+              ? const CircularProgressIndicator()
+              : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("X = $x"),
+                  const SizedBox(height: 18),
+                  Text("Y = $y"),
+                  const SizedBox(height: 18),
+                  Text("Z = $z"),
+                ],
+              )
             : Text(error!)
       ),
     );

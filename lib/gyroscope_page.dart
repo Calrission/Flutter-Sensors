@@ -15,6 +15,7 @@ class _GyroscopePageState extends State<GyroscopePage> {
   double deltaX = 0, deltaY = 0, deltaZ = 0;
   double x = 0, y = 0, z = 0;
   String? error;
+  bool isLoading = true;
   StreamSubscription<GyroscopeEvent>? _streamSubscription;
 
   @override
@@ -24,6 +25,9 @@ class _GyroscopePageState extends State<GyroscopePage> {
       samplingPeriod: SensorInterval.gameInterval
     ).listen(
       (GyroscopeEvent event) {
+        if (isLoading) {
+          isLoading = false;
+        }
         setState(() {
           deltaX = event.x;
           deltaY = event.y;
@@ -36,6 +40,7 @@ class _GyroscopePageState extends State<GyroscopePage> {
       },
       onError: (error) {
         setState(() {
+          isLoading = false;
           this.error = error.toString();
         });
       },
@@ -54,7 +59,10 @@ class _GyroscopePageState extends State<GyroscopePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: (error == null)
+          child:
+          (isLoading)
+            ? const CircularProgressIndicator()
+            : (error == null)
               ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -4,6 +4,7 @@ import 'package:sensor_project/gyroscope_page.dart';
 import 'package:sensor_project/light_sensor_page.dart';
 import 'package:sensor_project/magnetometer_page.dart';
 import 'package:sensor_project/proximity_sensor_page.dart';
+import 'package:sensor_project/temp_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -62,6 +63,13 @@ class _MainPageState extends State<MainPage> {
                   navigateTo(const ProximitySensorPage());
                 },
                 child: const Text("Датчик приближения")
+            ),
+            const SizedBox(height: 18),
+            FilledButton(
+                onPressed: (){
+                  navigateTo(const TempPage());
+                },
+                child: const Text("Датчик окружающей температуры")
             ),
           ],
         ),
