@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 
-class GpsUseCase {
+class MapUseCase {
   Future<void> getCurrentLocation(
     {
       required Function(Position) onResponse,

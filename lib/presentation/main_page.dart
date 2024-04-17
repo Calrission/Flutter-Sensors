@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sensor_project/presentation/accelerometer_page.dart';
 import 'package:sensor_project/presentation/avatar_page.dart';
-import 'package:sensor_project/presentation/gps_page.dart';
+import 'package:sensor_project/presentation/map_page.dart';
 import 'package:sensor_project/presentation/gyroscope_page.dart';
 import 'package:sensor_project/presentation/humidity_page.dart';
 import 'package:sensor_project/presentation/proximity_sensor_page.dart';
@@ -100,9 +100,9 @@ class _MainPageState extends State<MainPage> {
             const SizedBox(height: 18),
             FilledButton(
                 onPressed: (){
-                  navigateTo(const GpsPage());
+                  navigateTo(const MapPage());
                 },
-                child: const Text("GPS")
+                child: const Text("Карта")
             ),
           ],
         ),
