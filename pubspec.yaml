@@ -17,7 +17,9 @@ dependencies:
   cupertino_icons: ^1.0.6
   geolocator: ^11.0.0
   image_picker: ^1.0.8
+  flutter_svg: ^2.0.10+1
   yandex_mapkit: ^4.0.2
+  file_picker: ^8.0.0+1
 
 dev_dependencies:
   flutter_test:
