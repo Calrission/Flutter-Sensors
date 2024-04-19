@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sensor_project/domain/gyroscope_use_case.dart';
-import 'package:sensors_plus/sensors_plus.dart';
 
 class GyroscopePage extends StatefulWidget {
   const GyroscopePage({super.key});
@@ -39,6 +36,7 @@ class _GyroscopePageState extends State<GyroscopePage> {
           this.z = z;
         });
       },
+
       onError: (error){
         setState(() {
           isLoading = false;

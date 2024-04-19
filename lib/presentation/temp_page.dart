@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:environment_sensors/environment_sensors.dart';
 import 'package:flutter/material.dart';
 import 'package:sensor_project/domain/temp_use_case.dart';
 

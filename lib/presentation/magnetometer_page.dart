@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sensor_project/domain/magnetometer_use_case.dart';
-import 'package:sensors_plus/sensors_plus.dart';
 
 class MagnetometerPage extends StatefulWidget {
   const MagnetometerPage({super.key});
