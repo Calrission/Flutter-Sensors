@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapUseCase {
   Future<void> getCurrentLocation(
@@ -25,5 +26,28 @@ class MapUseCase {
 
     var position = await Geolocator.getCurrentPosition();
     onResponse(position);
+  }
+
+  Future<void> geocodePoint(
+      Point point,
+      {
+        required Function(String) onResponse,
+        required Function(String) onError
+      }
+    ) async {
+    var response = await YandexSearch.searchByPoint(
+      point: point,
+      searchOptions: const SearchOptions(
+          searchType: SearchType.geo,
+          geometry: false
+      )
+    );
+    var result = await response.$2;
+    var firstResult = result.items?.firstOrNull?.name;
+    if (firstResult == null){
+      onError("Not fount geocode point");
+      return;
+    }
+    onResponse(firstResult);
   }
 }

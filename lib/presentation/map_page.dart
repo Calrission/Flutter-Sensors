@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sensor_project/domain/gps_use_case.dart';
+import 'package:sensor_project/domain/map_use_case.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
@@ -20,7 +20,19 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     useCase.getCurrentLocation(
-      onResponse: (position) {
+      onResponse: (position) async {
+        await useCase.geocodePoint(
+            Point(
+              latitude: position.latitude,
+              longitude: position.longitude
+            ),
+            onResponse: (String address) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(address)));
+            },
+            onError: (String error) {
+              this.error = error;
+            });
         setState(() {
           latitude = position.latitude;
           longitude = position.longitude;

@@ -9,5 +9,6 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MapKitFactory.setApiKey("6e6c8dd2-463b-4039-b391-29adac56f4c9");
+        MapKitFactory.setLocale("RU_ru");
     }
 }
