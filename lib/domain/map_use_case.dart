@@ -29,21 +29,21 @@ class MapUseCase {
   }
 
   Future<void> geocodePoint(
-      Point point,
-      {
-        required Function(String) onResponse,
-        required Function(String) onError
-      }
-    ) async {
+    Point point,
+    {
+      required Function(String) onResponse,
+      required Function(String) onError
+    }
+  ) async {
     var response = await YandexSearch.searchByPoint(
       point: point,
       searchOptions: const SearchOptions(
-          searchType: SearchType.geo,
-          geometry: false
+        searchType: SearchType.geo,
+        geometry: false
       )
     );
     var result = await response.$2;
-    var firstResult = result.items?.firstOrNull?.name;
+    var firstResult = result.items?.firstOrNull?.toponymMetadata?.address.formattedAddress;
     if (firstResult == null){
       onError("Not fount geocode point");
       return;

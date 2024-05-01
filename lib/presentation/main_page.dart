@@ -4,6 +4,7 @@ import 'package:sensor_project/presentation/avatar_page.dart';
 import 'package:sensor_project/presentation/map_page.dart';
 import 'package:sensor_project/presentation/gyroscope_page.dart';
 import 'package:sensor_project/presentation/humidity_page.dart';
+import 'package:sensor_project/presentation/notification_page.dart';
 import 'package:sensor_project/presentation/proximity_sensor_page.dart';
 import 'package:sensor_project/presentation/pressure_sensor_page.dart';
 import 'package:sensor_project/presentation/svg_page.dart';
@@ -113,6 +114,13 @@ class _MainPageState extends State<MainPage> {
                     navigateTo(const SvgPage());
                   },
                   child: const Text("SVG + PickFile")
+              ),
+              const SizedBox(height: 18),
+              FilledButton(
+                  onPressed: (){
+                    navigateTo(const NotificationPage());
+                  },
+                  child: const Text("Push notification")
               ),
             ],
           ),

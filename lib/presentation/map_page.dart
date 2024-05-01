@@ -22,17 +22,17 @@ class _MapPageState extends State<MapPage> {
     useCase.getCurrentLocation(
       onResponse: (position) async {
         await useCase.geocodePoint(
-            Point(
-              latitude: position.latitude,
-              longitude: position.longitude
-            ),
-            onResponse: (String address) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(address)));
-            },
-            onError: (String error) {
-              this.error = error;
-            });
+          Point(
+            latitude: position.latitude,
+            longitude: position.longitude
+          ),
+          onResponse: (String address) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(address)));
+          },
+          onError: (String error) {
+            this.error = error;
+          });
         setState(() {
           latitude = position.latitude;
           longitude = position.longitude;
@@ -66,7 +66,7 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: Center(
         child: (error != null)
-          ? const Text("Ошибка")
+          ? Text(error!)
           : (latitude != null && longitude != null)
             ? YandexMap(
               mapObjects: [getMarkerCurrentLocation()],
